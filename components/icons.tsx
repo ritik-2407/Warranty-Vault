@@ -92,21 +92,3 @@ export function DocumentIcon({ className }: IconProps) {
     </svg>
   );
 }
-
-export function BoxIcon({ className }: IconProps) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-    </svg>
-  );
-}
-
-export function UploadIcon({ className }: IconProps) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-        d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 8l-4-4m0 0L8 8m4-4v12" />
-    </svg>
-  );
-}

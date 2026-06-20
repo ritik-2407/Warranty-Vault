@@ -70,9 +70,14 @@ export default function LandingPage() {
 
         {/* ── Hero ─────────────────────────────────────────────────────────── */}
         <section className="max-w-6xl mx-auto px-6 pt-20 pb-24 sm:pt-28 sm:pb-32 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#561e2d]/10 text-[#561e2d] text-sm font-medium mb-8 border border-[#561e2d]/20">
+          <a
+            href="https://digitalheroesco.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#561e2d]/10 text-[#561e2d] text-sm font-medium mb-8 border border-[#561e2d]/20 hover:bg-[#561e2d]/20 transition"
+          >
             Built for Digital Heroes
-          </div>
+          </a>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight mb-6 text-[#1a0a0e]">
             Never lose track of

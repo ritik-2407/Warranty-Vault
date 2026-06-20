@@ -8,6 +8,5 @@ export interface Product {
   warrantyValue?: number;
   warrantyUnit?: WarrantyUnit;
   expiryDate: string;
-  productImage?: string;
   billPhoto?: string;
 }

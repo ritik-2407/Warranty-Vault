@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import Image from "next/image";
-import { BoxIcon, CloseIcon, DocumentIcon, PencilIcon, PlusIcon } from "@/components/icons";
+import { CloseIcon, DocumentIcon, PencilIcon, PlusIcon } from "@/components/icons";
 import { FORM_INPUT_CLASS } from "@/lib/products/constants";
 import { addDuration } from "@/lib/products/date-utils";
 import { readImageFile } from "@/lib/products/images";
@@ -43,10 +42,6 @@ export function ProductFormModal({ onClose, onSave, product }: ProductFormModalP
   const [purchaseDate, setPurchaseDate] = useState(product?.purchaseDate ?? "");
   const [warrantyValue, setWarrantyValue] = useState<number | "">(initialWarranty.value);
   const [warrantyUnit, setWarrantyUnit] = useState<WarrantyUnit>(initialWarranty.unit);
-  const [productImage, setProductImage] = useState<string | undefined>(product?.productImage);
-  const [productImageFileName, setProductImageFileName] = useState(
-    product?.productImage ? "Current product image" : ""
-  );
   const [billPhoto, setBillPhoto] = useState<string | undefined>(product?.billPhoto);
   const [billFileName, setBillFileName] = useState(product?.billPhoto ? "Current receipt" : "");
   const [errors, setErrors] = useState<{
@@ -54,16 +49,8 @@ export function ProductFormModal({ onClose, onSave, product }: ProductFormModalP
     purchaseDate?: string;
     warrantyValue?: string;
   }>({});
-  const productImageInputRef = useRef<HTMLInputElement>(null);
   const billInputRef = useRef<HTMLInputElement>(null);
   const today = new Date().toISOString().split("T")[0];
-
-  const handleProductImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setProductImageFileName(file.name);
-    readImageFile(file, setProductImage);
-  }, []);
 
   const handleBillPhotoChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -94,7 +81,6 @@ export function ProductFormModal({ onClose, onSave, product }: ProductFormModalP
       warrantyValue: value,
       warrantyUnit,
       expiryDate: addDuration(purchaseDate, value, warrantyUnit),
-      productImage,
       billPhoto,
     });
   };
@@ -202,56 +188,7 @@ export function ProductFormModal({ onClose, onSave, product }: ProductFormModalP
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div>
-                <label className="block text-sm font-medium text-[#1a0a0e] mb-1.5">
-                  Product Image <span className="text-[#9a6070] font-normal">(optional)</span>
-                </label>
-                <div
-                  onClick={() => productImageInputRef.current?.click()}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg border border-dashed border-[#561e2d]/25 bg-[#fdf5f6] cursor-pointer hover:border-[#561e2d]/50 hover:bg-[#561e2d]/5 transition"
-                >
-                  <div className="w-9 h-9 rounded-lg bg-[#561e2d]/10 border border-[#561e2d]/20 flex items-center justify-center shrink-0">
-                    <BoxIcon className="w-5 h-5 text-[#561e2d]" />
-                  </div>
-                  <span className="text-sm text-[#9a6070] truncate">
-                    {productImageFileName || "Upload product photo"}
-                  </span>
-                </div>
-                <input
-                  ref={productImageInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleProductImageChange}
-                  className="hidden"
-                />
-                {productImage && (
-                  <div className="mt-2 relative inline-block">
-                    <Image
-                      src={productImage}
-                      alt="Product preview"
-                      width={80}
-                      height={80}
-                      className="w-20 h-20 object-cover rounded-lg border border-[#561e2d]/25"
-                      unoptimized
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setProductImage(undefined);
-                        setProductImageFileName("");
-                        if (productImageInputRef.current) productImageInputRef.current.value = "";
-                      }}
-                      className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center shadow hover:bg-red-600"
-                      aria-label="Remove product image"
-                    >
-                      ×
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <div>
+            <div>
                 <label className="block text-sm font-medium text-[#1a0a0e] mb-1.5">
                   Bill / Receipt <span className="text-[#9a6070] font-normal">(optional)</span>
                 </label>
@@ -289,7 +226,6 @@ export function ProductFormModal({ onClose, onSave, product }: ProductFormModalP
                     </button>
                   </div>
                 )}
-              </div>
             </div>
 
             <div className="flex items-center justify-end gap-3 pt-1">
