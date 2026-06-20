@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Warranty Tracker",
+  title: "Warranty Vault",
   description: "Track your product warranties and never miss an expiry.",
 };
 
