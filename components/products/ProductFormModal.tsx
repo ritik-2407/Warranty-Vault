@@ -44,11 +44,15 @@ export function ProductFormModal({ onClose, onSave, product }: ProductFormModalP
   const [warrantyUnit, setWarrantyUnit] = useState<WarrantyUnit>(initialWarranty.unit);
   const [billPhoto, setBillPhoto] = useState<string | undefined>(product?.billPhoto);
   const [billFileName, setBillFileName] = useState(product?.billPhoto ? "Current receipt" : "");
+  // Add optional billPhoto error to the form errors
   const [errors, setErrors] = useState<{
     name?: string;
     purchaseDate?: string;
     warrantyValue?: string;
+    billPhoto?: string;
   }>({});
+  // Max upload size for bill/receipt (bytes)
+  const MAX_BILL_SIZE = 1 * 1024 * 1024; // 1 MB
   const billInputRef = useRef<HTMLInputElement>(null);
   const today = new Date().toISOString().split("T")[0];
 
@@ -56,6 +60,16 @@ export function ProductFormModal({ onClose, onSave, product }: ProductFormModalP
     const file = e.target.files?.[0];
     if (!file) return;
     setBillFileName(file.name);
+    if (file.size > MAX_BILL_SIZE) {
+      setBillPhoto(undefined);
+      setErrors((prev) => ({ ...prev, billPhoto: `File too large (max ${Math.round(MAX_BILL_SIZE / 1024 / 1024)} MB).` }));
+      return;
+    }
+    // clear any previous bill error
+    setErrors((prev) => {
+      const { billPhoto: _b, ...rest } = prev;
+      return rest;
+    });
     readImageFile(file, setBillPhoto);
   }, []);
 
@@ -65,7 +79,9 @@ export function ProductFormModal({ onClose, onSave, product }: ProductFormModalP
     if (!purchaseDate) errs.purchaseDate = "Purchase date is required.";
     if (warrantyValue === "" || warrantyValue < 1)
       errs.warrantyValue = "Enter a valid warranty duration (minimum 1).";
-    setErrors(errs);
+    // preserve billPhoto error if present
+    if (errors.billPhoto) (errs as any).billPhoto = errors.billPhoto;
+    setErrors(errs as any);
     return Object.keys(errs).length === 0;
   };
 
@@ -225,6 +241,9 @@ export function ProductFormModal({ onClose, onSave, product }: ProductFormModalP
                       Remove
                     </button>
                   </div>
+                )}
+                {errors.billPhoto && (
+                  <p className="mt-1 text-xs text-red-600">{errors.billPhoto}</p>
                 )}
             </div>
 
